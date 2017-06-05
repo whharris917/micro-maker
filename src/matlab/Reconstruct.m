@@ -82,4 +82,4 @@ function [S_star, Recon] = Reconstruct(Recon, max_iterations)
     else
         [S_star, Recon] = SolidOptimization(Recon, max_iterations, S_star, useWeights);
     end
-end
+end 
