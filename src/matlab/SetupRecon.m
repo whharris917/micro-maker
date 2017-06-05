@@ -3,23 +3,17 @@ function RS = SetupRecon(params)
     add_paths;
 
     RS = params;
-
     HALF_NB_SIZE = floor(RS.NB_SIZE/2);
-
     NUM_EXEMPLARS = length(RS.EXEMPLARS);
-
     RS.Exemplar_NBs = cell(NUM_EXEMPLARS, 1);
-
     RS.Exemplar_Index = cell(NUM_EXEMPLARS, 1);
-
     RS.Exemplar_Params = cell(NUM_EXEMPLARS, 1);
-
     RS.Exemplar_NBLookup = cell(NUM_EXEMPLARS,1);
-
     RS.NB_ExemplarLookup = cell(NUM_EXEMPLARS,1);
 
     nbOffsets = MakeNBOffsets(RS.NB_SIZE);
     nbOffsets = nbOffsets(RS.NB_INDICES);
+    
     RS.nbOffsets = zeros([length(RS.NB_INDICES), size(nbOffsets{1})]);
     for ii=1:length(RS.NB_INDICES)
         RS.nbOffsets(ii, :) = nbOffsets{ii}(:);
