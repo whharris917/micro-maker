@@ -41,28 +41,14 @@ function [S_star, Recon] = Reconstruct(Recon, max_iterations, startm)
 
 %------------- BEGIN CODE --------------
 
-    % We need to check whether this is hierarchical reconstruction or just
-    % a single level reconstruction.
-    if(isfield(Recon, 'NUM_LEVELS'))
-        FULL_RECON_SIZE = Recon.ReconObjects{1}.RECON_SIZE;
-        START_RECON_SIZE = Recon.ReconObjects{Recon.NUM_LEVELS}.RECON_SIZE;
-    else
-        FULL_RECON_SIZE = Recon.RECON_SIZE;
-        START_RECON_SIZE = FULL_RECON_SIZE;
-    end
-
-    % Setup all the default arguments
+    FULL_RECON_SIZE = Recon.ReconObjects{1}.RECON_SIZE;
+    START_RECON_SIZE = Recon.ReconObjects{Recon.NUM_LEVELS}.RECON_SIZE;
     
     if(nargin < 2)
-        if(isfield(Recon, 'NUM_LEVELS'))
-            max_iterations = ones(Recon.NUM_LEVELS, 1) * 100;
-            max_iterations(1) = 10;
-        else
-            max_iterations = 100;
-        end
+        max_iterations = ones(Recon.NUM_LEVELS, 1) * 100;
+        max_iterations(1) = 10;
     end
 
-    
     % If the user has not passed in a starting guess then create one
     % from threhsolded random noise.
     if(nargin < 3)
@@ -74,36 +60,20 @@ function [S_star, Recon] = Reconstruct(Recon, max_iterations, startm)
                 START_RECON_SIZE(1), START_RECON_SIZE(2), START_RECON_SIZE(3));
         end
     end
-    
-    % If the user did not pass in whether to use neighborhood search
-    % waiting then assume the default (no)
-    if(~isfield(Recon, 'UseNeighborhoodSearchWeights'))
-        useWeights = false;
-    else
-        useWeights = Recon.UseNeighborhoodSearchWeights;
-    end
+
+    useWeights = Recon.UseNeighborhoodSearchWeights;
 
     % Lets initialize the loop reconstruciton variable witht the starting
     % guess.
     S_star = startm;
-       
-    % We need to check whether this is hierarchical reconstruction or just
-    % a single level reconstruction.
-    if(isfield(Recon, 'NUM_LEVELS'))
-        
-        % If we are using neighborhood weighting, then we need to remove
-        % any weights from previous runs. This will trigger the first call
-        % to SolidOptimization to re-initialize them.
-        if(useWeights)
-            for ii=1:Recon.NUM_LEVELS
-                if(isfield(Recon.ReconObjects{ii}, 'NBWeights'))
-                    Recon.ReconObjects{ii} = rmfield(Recon.ReconObjects{ii}, 'NBWeights');
-                end
+
+    if(useWeights)
+        for ii=1:Recon.NUM_LEVELS
+            if(isfield(Recon.ReconObjects{ii}, 'NBWeights'))
+                Recon.ReconObjects{ii} = rmfield(Recon.ReconObjects{ii}, 'NBWeights');
             end
         end
-
         
-        % Lets initialize the loop variables
         ll = 1;
         
         % We will be plotting a lot of figures during the optimization
