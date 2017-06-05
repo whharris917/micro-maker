@@ -8,6 +8,7 @@ function [S_star, Recon] = Reconstruct(Recon, max_iterations)
     S_star = startm;
 
     if(useWeights)
+    
         for ii=1:Recon.NUM_LEVELS
             if(isfield(Recon.ReconObjects{ii}, 'NBWeights'))
                 Recon.ReconObjects{ii} = rmfield(Recon.ReconObjects{ii}, 'NBWeights');
@@ -25,7 +26,6 @@ function [S_star, Recon] = Reconstruct(Recon, max_iterations)
         % to highest.
         for ii=Recon.NUM_LEVELS:-1:1
 
-            % Don't use neighborhood weights at the highest resolution, it takes too long.
             if(ii == 1)
                 useWeights = 0;
             end
@@ -33,8 +33,7 @@ function [S_star, Recon] = Reconstruct(Recon, max_iterations)
             % Make sure to assign the return reconstruction object because
             % this functions is expected to produce side effects on the
             % object.
-            [S_star Recon.ReconObjects{ii}] = SolidOptimization(Recon.ReconObjects{ii}, ...
-                                                max_iterations(ii), S_star, useWeights);
+            [S_star Recon.ReconObjects{ii}] = SolidOptimization(Recon.ReconObjects{ii}, max_iterations(ii), S_star, useWeights);
    
             
             % If we are not at the final resolution, we need to do some
