@@ -19,28 +19,17 @@ function RS = SetupRecon(params)
         RS.nbOffsets(ii, :) = nbOffsets{ii}(:);
     end
 
-    if(strcmp(RS.ANN_ALGO,'FLANN'))
-        build_params.cores = RS.NUM_CORES;
-        build_params.algorithm = 'kdtree';
-        build_params.trees = 8;
-        build_params.checks = 131;
-    elseif(strcmp(RS.ANN_ALGO,'PatchTable'))
-       build_params = [];
-    else
-        error('Invalid ANN_ALGO parameter. Must be either FLANN or PatchTable');
-    end
+    build_params.cores = RS.NUM_CORES;
+    build_params.algorithm = 'kdtree';
+    build_params.trees = 8;
+    build_params.checks = 131;
 
     for ii=1:NUM_EXEMPLARS
+    
         fprintf(1, '\tGetting neighborhoods for exemplar %d of %d ...', ii, NUM_EXEMPLARS);
 
-        if(isfield(RS, 'NB_GrainList'))
-            [NB_Hoods RS.NB_ExemplarLookup{ii} RS.NB_GrainList{ii}] = GetAllNHoodsMEX(RS.EXEMPLARS{ii}, RS.NB_SIZE);
-            RS.NB_NumGrains{ii} = sum(RS.NB_GrainList{ii} > 0, 2);
-            RS.NB_GrainList{ii} = uint16(RS.NB_GrainList{ii});
-            RS.NB_GrainList{ii} = RS.NB_GrainList{ii}(:, 1:max(RS.NB_NumGrains{ii}));
-        else
-            [NB_Hoods RS.NB_ExemplarLookup{ii}] = GetAllNHoodsMEX(RS.EXEMPLARS{ii}, RS.NB_SIZE);
-        end
+        [NB_Hoods RS.NB_ExemplarLookup{ii}] = GetAllNHoodsMEX(RS.EXEMPLARS{ii}, RS.NB_SIZE);
+        
         RS.Exemplar_NBs{ii} = NB_Hoods; 
 
         % Make a map for the original exemplar image that tells where each
