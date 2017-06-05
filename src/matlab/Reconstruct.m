@@ -8,6 +8,8 @@ function [S_star, Recon] = Reconstruct(Recon, max_iterations)
     S_star = startm;
 
     if(useWeights)
+    
+        %{ IGNORE THIS SECTION
 
         for ii=1:Recon.NUM_LEVELS
             if(isfield(Recon.ReconObjects{ii}, 'NBWeights'))
@@ -79,8 +81,11 @@ function [S_star, Recon] = Reconstruct(Recon, max_iterations)
             end
             ll = ll + 1;
         end
+        
+        %}
+        
     else
         [S_star, Recon] = SolidOptimization(Recon, max_iterations, S_star, useWeights);
     end
-    
+
 end 
