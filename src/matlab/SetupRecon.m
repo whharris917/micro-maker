@@ -43,23 +43,6 @@ function RS = SetupRecon(params)
         end
         RS.Exemplar_NBs{ii} = NB_Hoods; 
 
-        % If there is a grain boundary map. Then get the neighborhoods for this as well
-        if(isfield(RS, 'E_Edges'))
-            [RS.Exemplar_NBs_Edges{ii} RS.NB_ExemplarLookup{ii}] = GetAllNHoodsMEX(RS.E_Edges{ii}, RS.NB_SIZE);
-        end
-
-        % If we have an angle map. Then the images are indexed and we need to convert
-        % the neighborhoods to their actual angles. We will use the 6,7,8 GSH coeffcients
-        % because they have indpendent information.
-        if(isAngMap)
-            tmp = zeros(size(NB_Hoods, 1), 3*size(NB_Hoods, 2));
-            for ll=1:size(ANG_MAP, 2)
-                idx_start = (ll-1)*size(NB_Hoods, 2)+1;
-                tmp(:, idx_start:(idx_start+size(NB_Hoods,2)-1)) = reshape(ANG_MAP(NB_Hoods, ll), size(NB_Hoods));
-            end
-            RS.Exemplar_NBs{ii} = tmp;
-        end
-
         % Make a map for the original exemplar image that tells where each
         % neighborhood is stored in the the neighborhood table
         RS.Exemplar_NBLookup{ii} = zeros(size(RS.EXEMPLARS{ii}));
