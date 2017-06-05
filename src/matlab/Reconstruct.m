@@ -1,38 +1,5 @@
 function [S_star, Recon] = Reconstruct(Recon, max_iterations, startm)
 
-
-%    max_iterations - Either a vector of length Recon.NUM_LEVELS or a
-%    scalar specifiying the number of iterations to run the reconstruction
-%    at each level. The levels are ordered from highest resolution to
-%    lowest resolution. It is wise to choose a low number of resolutions
-%    for higher resolutions because they take much longer. For example, for
-%    a three level reconstruction something like [5, 50, 100] might work
-%    well. This is very problem dependent thought as some reconstructions
-%    take longer to converge than others.
-%
-%    startm - The starting guess microstructure to work with. This must be
-%    the size of the lowest level resolution in your reconstruction
-%    hierarchy. That is, Recon.ReconObjects{Recon.NUM_LEVELS}.RECON_SIZE.
-%
-% Outputs:
-%    RS - The reconstruction struct containing all data structures
-%    needed for performing a reconstruction optimization.
-%
-% Example: 
-%    RS = SetupRecon(params);
-%
-% Other m-files required: 
-% MAT-files required: ThresholdToVf.m PlotIteration.m. PlotIterationGrainMap.m
-%
-% See also: SetupRecon SetupReconMultiRes 
-
-% Author: David Turner
-% Email: davidt0x@gmail.com 
-% Website: https://github.com/davidt0x
-% December 2016
-
-%------------- BEGIN CODE --------------
-
     FULL_RECON_SIZE = Recon.ReconObjects{1}.RECON_SIZE;
     START_RECON_SIZE = Recon.ReconObjects{Recon.NUM_LEVELS}.RECON_SIZE;
     
