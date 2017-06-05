@@ -1,16 +1,11 @@
-function [S, Recon, S_iters] = SolidOptimization(Recon, NUM_ITERATIONS, start, useWeights)
+function [S, Recon] = SolidOptimization(Recon, NUM_ITERATIONS, start, useWeights)
 
     S = start;
-    
-    if(nargout > 2)
-        S_iters = zeros([size(S) NUM_ITERATIONS+1]);
-        S_iters(:, :, :, 1) = S;
-    end
-    
     elapsed_search = 0;
     elapsed_opt = 0;
 
     for ii=1:NUM_ITERATIONS
+    
         fprintf(1, 'Iteration: %d\n', ii);
 
         tic;
@@ -34,15 +29,10 @@ function [S, Recon, S_iters] = SolidOptimization(Recon, NUM_ITERATIONS, start, u
                 H(xy(1), xy(2)) = H(xy(1), xy(2)) + 1; 
             end
             H = H ./ sum(H(:));
-            
             Recon.NBHoodHist{pp} = H;
         end
         
         PlotIteration(Recon, S, Snew, useWeights);
-       
-        if(nargout > 2)
-            S_iters(:, :, :, ii+1) = Snew;
-        end
 
         perVoxelPercentChange = abs(S(:) - Snew(:)) ./ S(:); 
         perVoxelPercentChange(isnan(perVoxelPercentChange)) = 0;
@@ -63,9 +53,5 @@ function [S, Recon, S_iters] = SolidOptimization(Recon, NUM_ITERATIONS, start, u
     end
     
     fprintf(1, '   Iterations: %d   SearchTime: %f secs   OptimTime: %f secs\n', ii, elapsed_search, elapsed_opt);
-
-    if(nargout > 2)
-        S_iters = S_iters(:, :, :, 1:ii);
-    end
 
 end
