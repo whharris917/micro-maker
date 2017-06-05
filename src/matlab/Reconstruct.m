@@ -1,29 +1,10 @@
-function [S_star, Recon] = Reconstruct(Recon, max_iterations, startm)
+function [S_star, Recon] = Reconstruct(Recon, max_iterations)
 
     FULL_RECON_SIZE = Recon.ReconObjects{1}.RECON_SIZE;
     START_RECON_SIZE = Recon.ReconObjects{Recon.NUM_LEVELS}.RECON_SIZE;
-    
-    if(nargin < 2)
-        max_iterations = ones(Recon.NUM_LEVELS, 1) * 100;
-        max_iterations(1) = 10;
-    end
-
-    % If the user has not passed in a starting guess then create one
-    % from threhsolded random noise.
-    if(nargin < 3)
-       startm = double(rand(START_RECON_SIZE) > 0.5);
-    else
-        % Make sure the dimensions are correct
-        if( any(size(startm) ~= START_RECON_SIZE) )
-            error('Starting guess microstructure has incorrect dimensions. Must be [%d %d %d]', ... 
-                START_RECON_SIZE(1), START_RECON_SIZE(2), START_RECON_SIZE(3));
-        end
-    end
-
+    startm = double(rand(START_RECON_SIZE) > 0.5);
     useWeights = Recon.UseNeighborhoodSearchWeights;
 
-    % Lets initialize the loop reconstruciton variable witht the starting
-    % guess.
     S_star = startm;
 
     if(useWeights)
