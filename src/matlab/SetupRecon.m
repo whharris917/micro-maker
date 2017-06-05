@@ -44,31 +44,13 @@ function RS = SetupRecon(params)
         % Build nearest neighbor query indices for these points.
         fprintf(1, '\tBuilding ANN index for exemplar %d of %d ...', ii, NUM_EXEMPLARS);
         RS.Exemplar_Params{ii} = build_params;
+        
         tic;
-        if(isfield(RS, 'Exemplar_NBs_Edges') && ~isAngMap)
-            if(isfield(RS, 'NB_NumGrains'))
-                if(strcmp(RS.ANN_ALGO, 'FLANN'))
-                    [RS.Exemplar_Index{ii} RS.Exemplar_Params{ii}] = flann_build_index([RS.Exemplar_NBs_Edges{ii} RS.NB_NumGrains{ii}*1000]', build_params);
-                elseif(strcmp(RS.ANN_ALGO, 'PatchTable'))
-                    
-                end
-            else
-                if(strcmp(RS.ANN_ALGO, 'FLANN'))
-                    [RS.Exemplar_Index{ii} RS.Exemplar_Params{ii}] = flann_build_index(RS.Exemplar_NBs_Edges{ii}', build_params);
-                elseif(strcmp(RS.ANN_ALGO, 'PatchTable'))
-                    
-                end
-            end
-        else
-            if(strcmp(RS.ANN_ALGO, 'FLANN'))
-                [RS.Exemplar_Index{ii} RS.Exemplar_Params{ii}] = flann_build_index([RS.Exemplar_NBs{ii}]' , build_params);
-            elseif(strcmp(RS.ANN_ALGO, 'PatchTable'))
-                
-            end
-        end
-
+        [RS.Exemplar_Index{ii} RS.Exemplar_Params{ii}] = flann_build_index([RS.Exemplar_NBs{ii}]' , build_params);
         elapsed_time = toc;
+        
         fprintf(1, 'Done. Time to Build = %f seconds\n', elapsed_time);
+        
     end
 
     % Setup the reconstruction change table. This tells us which
