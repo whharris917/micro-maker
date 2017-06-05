@@ -18,18 +18,6 @@ function RS = SetupRecon(params)
 
     RS.NB_ExemplarLookup = cell(NUM_EXEMPLARS,1);
 
-    isAngMap = isfield(RS, 'ANG_MAP');
-
-    if(max(RS.EXEMPLARS{1}(:)) > 1)
-        RS.Exemplar_NBs_Edges = cell(NUM_EXEMPLARS, 1);
-        RS.E_Edges = RS.EXEMPLARS;
-        for ii=1:NUM_EXEMPLARS
-            RS.E_Edges{ii} = GetEdgesCircShift2D(RS.EXEMPLARS{ii});
-        end
-        RS.NB_GrainList = cell(NUM_EXEMPLARS, 1);
-        RS.NB_NumGrains = cell(NUM_EXEMPLARS, 1);
-    end
-
     nbOffsets = MakeNBOffsets(RS.NB_SIZE);
     nbOffsets = nbOffsets(RS.NB_INDICES);
     RS.nbOffsets = zeros([length(RS.NB_INDICES), size(nbOffsets{1})]);
