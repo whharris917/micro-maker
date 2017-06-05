@@ -4,14 +4,6 @@ function [Recon] = SearchNNB(S, Recon, useWeights)
         useWeights = 0;
     end
 
-    if(max(S(:)) >= 2 && ~isfield(Recon, 'ANG_MAP'))
-        Sgrain = S;
-        S = GetEdgesCircShift(S);
-    end
-
-    % For each exemplar, we need to extract neighborhoods from the 3D image
-    % along the same orientation and find the best matching neighborhoods
-    % in the 2D exemplar.
     for ExIndex=1:size(Recon.EXEMPLARS, 1)
         nbOffsets = squeeze(Recon.nbOffsets(ExIndex, :, :));
         [NB_queries, isPeriodic] = Extract3DNeighborhoods(S, nbOffsets, Recon.NUM_CORES);
