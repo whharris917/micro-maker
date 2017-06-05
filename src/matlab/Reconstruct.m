@@ -21,9 +21,6 @@ function [S_star, Recon] = Reconstruct(Recon, max_iterations)
         % process, close anything that is open.
         close all;
 
-        % Lets start the reconstruction, we loop through the reconstruction
-        % objects from last to first because this is from lowest resolution
-        % to highest.
         for ii=Recon.NUM_LEVELS:-1:1
 
             if(ii == 1)
@@ -78,17 +75,11 @@ function [S_star, Recon] = Reconstruct(Recon, max_iterations)
                         xy = Recon.ReconObjects{ii-1}.NB_ExemplarLookup{pp}(kk, :);
                         Recon.ReconObjects{ii-1}.NBWeights{pp}(1, kk) = weight_table(xy(1), xy(2));   
                     end
-
                 end
-
             end
-            
             ll = ll + 1;
-        
         end
-
     else
         [S_star, Recon] = SolidOptimization(Recon, max_iterations, S_star, useWeights);
     end
-
 end
