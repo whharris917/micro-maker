@@ -1,14 +1,6 @@
 function [S_star, Recon] = Reconstruct(Recon, max_iterations, startm)
-% Reconstruct - This function runs the reconstruction algorithm using the
-% reconstruction struct passed to it. The Recon object must be created with
-% either SetupRecon or SetupReconMultiRes.
-%
-% Syntax:  [S_star, Recon] = Reconstruct(Recon, max_iterations, startm)
-%
-% Inputs:
-%    Recon - A reconstruction struct created by either SetupRecon or
-%    SetupReconMultiRes.
-%
+
+
 %    max_iterations - Either a vector of length Recon.NUM_LEVELS or a
 %    scalar specifiying the number of iterations to run the reconstruction
 %    at each level. The levels are ordered from highest resolution to
