@@ -1,26 +1,6 @@
 function [S, Recon, S_iters] = SolidOptimization(Recon, NUM_ITERATIONS, start, useWeights)
 
-    % Set the default arguments
-
-    % If the user didn't specify whether we should use neighborhood
-    % weighing, default to no.
-    if(nargin < 4)
-        useWeights = 0;
-    end
-
-    % Lets set the iteration variable to the starting guess
     S = start;
-
-    % If we are using neighborhoods weights, we might need to initialize 
-    % them first. If they exit already, don't worry about it.
-    if(useWeights)
-        if(~isfield(Recon, 'NBWeights'))
-            fprintf(1, 'Initializing Neighborhood Weights\n');
-            for ii=1:length(Recon.EXEMPLARS)
-                Recon.NBWeights{ii} = ones(1, size(Recon.Exemplar_NBs{ii},1)) * Recon.NB_SIZE;
-            end
-        end
-    end
     
     % If the user has asked to return a copy of each iteration's structure
     % then we need to allocate it.
@@ -66,46 +46,9 @@ function [S, Recon, S_iters] = SolidOptimization(Recon, NUM_ITERATIONS, start, u
             
             Recon.NBHoodHist{pp} = H;
         end
-        
-        % Update the neighborhood weights
-        if(useWeights)
-            for pp=1:size(Recon.EXEMPLARS, 1)
-                
-                % If every neighborhood is used equally, then we would
-                % expect to find this value for each neighborhood 
-                expected_weight = (length(NBs) / size(Recon.Exemplar_NBs{pp}, 1)) / length(NBs);
-                
-                % Calculate how far off we are for each neighborhood
-                diff_weights = Recon.NBHoodHist{pp} - expected_weight;
-                  
-                % This scale factor is a fudge factor. Basically, it
-                % controls how much the weights will change. The larger the
-                % value, the quicker neighborhoods will get downweighted
-                % each iteration. Remember, the neighborhood weights will
-                % keep increasing for oversampled neighborhoods each
-                % iteration if the image wont change. This allows us to get
-                % out of local minima if we wait enough iterations.
-                ScaleFactor = 10*Recon.NB_SIZE*Recon.NB_SIZE;
 
-                % Accumulate the changes to the weight table 
-                weight_table = zeros(size(diff_weights));
-                for kk=1:length(Recon.NBWeights{pp})
-                    xy = Recon.NB_ExemplarLookup{pp}(kk, :);
-                    Recon.NBWeights{pp}(kk) = Recon.NBWeights{pp}(kk) + diff_weights(xy(1), xy(2)) * ScaleFactor;
-                    if(Recon.NBWeights{pp}(kk) < 0)
-                        Recon.NBWeights{pp}(kk) = 0;
-                    end
-                    weight_table(xy(1), xy(2)) = Recon.NBWeights{pp}(kk);
-                end
-            end
-        end
 
-        % If we are running a polycrsytal reconstruction
-        if(isfield(Recon, 'ANG_MAP'))
-            PlotIterationPolycrystal(Recon, S, Snew, useWeights, ANG_MAP);            
-        else
-            PlotIteration(Recon, S, Snew, useWeights);
-        end
+        PlotIteration(Recon, S, Snew, useWeights);
        
         % Store a copy of the current structure every iteration if the user
         % wants it.
