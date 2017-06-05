@@ -49,15 +49,7 @@ function RS = SetupRecon(params)
         
     end
 
-    % Setup the reconstruction change table. This tells us which
-    % neighborhoods have changed in the reconstruction over the last
-    % iteration. This allows us to only search for new matching
-    % neighborhoods on those that have changed.
     RS.change_table = ones(RS.RECON_SIZE);
-
-    % At each iteration we need to build a table that says for each voxel
-    % in the reconstruction where the best matching neighborhoods is in each
-    % exemplar.
     RS.NNB_Table = zeros([RS.RECON_SIZE NUM_EXEMPLARS]);
 
 end
