@@ -29,11 +29,8 @@ function RS = SetupRecon(params)
         fprintf(1, '\tGetting neighborhoods for exemplar %d of %d ...', ii, NUM_EXEMPLARS);
 
         [NB_Hoods RS.NB_ExemplarLookup{ii}] = GetAllNHoodsMEX(RS.EXEMPLARS{ii}, RS.NB_SIZE);
-        
         RS.Exemplar_NBs{ii} = NB_Hoods; 
 
-        % Make a map for the original exemplar image that tells where each
-        % neighborhood is stored in the the neighborhood table
         RS.Exemplar_NBLookup{ii} = zeros(size(RS.EXEMPLARS{ii}));
         for ll=1:size(RS.NB_ExemplarLookup{ii}, 1)
            RS.Exemplar_NBLookup{ii}(RS.NB_ExemplarLookup{ii}(ll, 1), RS.NB_ExemplarLookup{ii}(ll, 2)) = ll;  
