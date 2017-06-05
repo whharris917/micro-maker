@@ -1,10 +1,5 @@
 function ReconH = SetupReconMultiRes(params)
 
-[isValid, errMsg] = CheckReconParamsMultiRes(params);
-if(~isValid)
-    error(errMsg);
-end
-
 ReconH = params;
 ReconH.ReconObjects = cell(params.NUM_LEVELS, 1);
 ReconH.NUM_EXEMPLARS = length(ReconH.EXEMPLARS);
