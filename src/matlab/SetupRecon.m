@@ -38,7 +38,6 @@ function RS = SetupRecon(params)
 
         fprintf(1, 'Done\n');
 
-        % Build nearest neighbor query indices for these points.
         fprintf(1, '\tBuilding ANN index for exemplar %d of %d ...', ii, NUM_EXEMPLARS);
         RS.Exemplar_Params{ii} = build_params;
         
