@@ -1,9 +1,5 @@
 function [Recon] = SearchNNB(S, Recon, useWeights)
 
-    if(nargin < 3)
-        useWeights = 0;
-    end
-
     for ExIndex=1:size(Recon.EXEMPLARS, 1)
         nbOffsets = squeeze(Recon.nbOffsets(ExIndex, :, :));
         [NB_queries, isPeriodic] = Extract3DNeighborhoods(S, nbOffsets, Recon.NUM_CORES);
